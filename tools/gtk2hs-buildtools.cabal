@@ -47,7 +47,16 @@ Library
         if !impl(ghc >= 8.0)
           build-depends: fail
         if impl(ghc >= 7.7)
-          build-depends: hashtables
+          -- ouroboros-network-lib requires hashtables < 1.3. We would typically
+          -- constrain hashtables with a constraint in a cabal.project or cabal
+          -- file. However, because gtk2hs-buildtools is used as a build tool,
+          -- cabal has no way of applying constraints to gtk2hs-buildtools, so
+          -- any constraint we enforce from above is ignored.
+          --
+          -- We have to fork the package and apply the constraint at the source.
+          --
+          -- See https://github.com/haskell/cabal/issues/7787
+          build-depends: hashtables < 1.3
         build-tool-depends: alex:alex >= 3.0.1, happy:happy >= 1.18.9
         hs-source-dirs:  src
                          hierarchyGen
